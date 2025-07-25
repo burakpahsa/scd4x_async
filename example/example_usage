@@ -1,0 +1,25 @@
+if __name__ == "__main__":
+
+    # I2C0: SCD4X
+    i2c0 = machine.I2C(0, freq=100000)
+    print("i2c0 scan result:", i2c0.scan())
+    scd4x = SCD4X(i2c0)
+    scd4x.start_periodic_measurement()
+
+    # I2C1: LCD
+    #i2c1 = machine.I2C(1, sda=machine.Pin(2), scl=machine.Pin(3), freq=100000)
+    #print("i2c1 scan result:", i2c1.scan())
+    #lcd = AQM1602(i2c1)
+
+    seq = 0
+    print("seq,co2,temperature,humidity")
+    #lcd.print(0, "SCD4X CO2 Sensor")
+    #lcd.print(1, "Initializing...")
+
+    while True:
+        if scd4x.data_ready:
+            print("CO2: %d ppm" % scd4x.CO2)
+            print("Temperature: %0.1f *C" % scd4x.temperature)
+            print("Humidity: %0.1f %%" % scd4x.relative_humidity)
+            print()
+        time.sleep(1)
